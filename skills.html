@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>송강규 | 핵심 역량 헤드라인</title>
+    <!-- 프리텐다드 폰트 불러오기 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <style>
+        /* 기본 스타일 초기화 및 변수 설정 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+        }
+
+        :root {
+            --bg-deep-navy: #0f172a; /* 묵직한 신뢰감의 딥 네이비 */
+            --bg-card: #1e293b;
+            --point-orange: #ff6b00; /* 열정적인 디지털 오렌지 */
+            --text-white: #f8fafc;
+            --text-gray: #94a3b8;
+            --max-width: 1100px;
+        }
+
+        body {
+            background-color: var(--bg-deep-navy);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 70px; /* 네비게이션 바 높이만큼 상단 여백 추가 */
+        }
+
+        /* 공통 스타일 */
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 48px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 32px;
+            height: 4px;
+            background-color: var(--point-orange);
+        }
+
+        /* 강점 카드 섹션 스타일 (skills.html 전용 기본 본문 구조) */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .skill-card {
+            background-color: var(--bg-card);
+            padding: 40px 32px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .skill-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            word-break: keep-all;
+        }
+
+        .skill-card-desc {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-bottom: 24px;
+            word-break: keep-all;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background-color: rgba(15, 23, 42, 0.6);
+            color: var(--text-white);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* 푸터 */
+        footer {
+            background-color: #090d16;
+            padding: 48px 0;
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            margin-left: 24px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--point-orange);
+        }
+
+        /* 반응형 레이아웃 조정 */
+        @media (max-width: 968px) {
+            .skills-grid { grid-template-columns: 1fr; }
+            section { padding: 70px 0; }
+        }
+
+        /* ==========================================================
+           [절대 수정 금지] 요청된 네비게이션 바 내부 스타일 주입
+           ========================================================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1100px;
+            height: 100%;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #f8fafc;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-link {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #94a3b8;
+            text-decoration: none;
+            position: relative;
+            padding: 8px 0;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #f8fafc;
+        }
+
+        .nav-link.active {
+            color: #ff6b00;
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff6b00;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1101;
+        }
+
+        .nav-toggle .bar {
+            width: 100%;
+            height: 2px;
+            background-color: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        @media (max-width: 968px) {
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 260px;
+                height: 100vh;
+                background-color: #1e293b;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 32px;
+                gap: 24px;
+                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+                transition: right 0.3s ease;
+            }
+
+            .nav-menu.open {
+                right: 0;
+            }
+
+            .nav-link {
+                font-size: 1.1rem;
+                display: block;
+                width: 100%;
+            }
+
+            .nav-toggle.open .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .nav-toggle.open .bar:nth-child(2) {
+                opacity: 0;
+            }
+            .nav-toggle.open .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- [절대 수정 금지] 상단 네비게이션 바 삽입 (핵심 역량 헤드라인에 active 적용) -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">KANGGYU<span class="highlight">.</span></a>
+            
+            <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="home.html" class="nav-link">기본 홈</a></li>
+                <li class="nav-item"><a href="about.html" class="nav-link">스토리와 루틴</a></li>
+                <li class="nav-item"><a href="skills.html" class="nav-link active">핵심 역량 헤드라인</a></li>
+                <li class="nav-item"><a href="target.html" class="nav-link">목표 기업</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 본문 내용: 강점 카드 구조 구성 -->
+    <section class="skills">
+        <div class="container">
+            <h2 class="section-title">핵심 역량 헤드라인</h2>
+            <div class="skills-grid">
+                <!-- 카드 1 -->
+                <div class="skill-card">
+                    <div class="skill-icon">🎯</div>
+                    <h3 class="skill-card-title">C++ 백준 골드 1이 증명하는 집요한 문제 해결력</h3>
+                    <p class="skill-card-desc">타협하지 않는 알고리즘 기본기를 갖추었습니다. 복잡한 비즈니스 로직과 대규모 데이터 구조를 마주했을 때 끝까지 추적하여 최적의 해답을 도출합니다.</p>
+                    <div class="skill-tags">
+                        <span class="tag">C++</span>
+                        <span class="tag">Algorithm</span>
+                        <span class="tag">Gold 1</span>
+                    </div>
+                </div>
+                <!-- 카드 2 -->
+                <div class="skill-card">
+                    <div class="skill-icon">⚡</div>
+                    <h3 class="skill-card-title">React와 Next.js 기반의 컴포넌트 구조 설계</h3>
+                    <p class="skill-card-desc">Javascript와 Typescript를 활용하여 확장성 있고 유지보수가 용이한 프론트엔드 아키텍처를 설계합니다. 정밀하고 세련된 사용자 경험을 구현하는 데 집중합니다.</p>
+                    <div class="skill-tags">
+                        <span class="tag">Javascript</span>
+                        <span class="tag">Typescript</span>
+                        <span class="tag">React</span>
+                        <span class="tag">Next.js</span>
+                    </div>
+                </div>
+                <!-- 카드 3 -->
+                <div class="skill-card">
+                    <div class="skill-icon">🔄</div>
+                    <h3 class="skill-card-title">화면 너머를 이해하는 풀스택적 시야와 소통</h3>
+                    <p class="skill-card-desc">UI 영역에 머무르지 않고 백엔드 메커니즘을 끊임없이 탐구합니다. 데이터의 유기적인 흐름과 API 구조를 명확히 이해하여 협업 시 소통 비용을 획기적으로 낮춥니다.</p>
+                    <div class="skill-tags">
+                        <span class="tag">Backend Curiosity</span>
+                        <span class="tag">Architecture</span>
+                        <span class="tag">Collaboration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 Song KangGyu. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="https://github.com" target="_blank">Github</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- [절대 수정 금지] 네비게이션 스크립트 주입 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('navToggle');
+            const menu = document.getElementById('navMenu');
+
+            if (toggleBtn && menu) {
+                toggleBtn.addEventListener('click', () => {
+                    toggleBtn.classList.toggle('open');
+                    menu.classList.toggle('open');
+                });
+
+                menu.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        toggleBtn.classList.remove('open');
+                        menu.classList.remove('open');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
