@@ -1,225 +1,36 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>송강규 | 스토리와 루틴</title>
-    <!-- 프리텐다드 폰트 불러오기 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-navy': '#0f172a',
+                        'card-navy': '#1e293b',
+                        'point-orange': '#ff6b00',
+                        'text-white': '#f8fafc',
+                        'text-gray': '#94a3b8',
+                        'footer-black': '#090d16',
+                    },
+                    fontFamily: {
+                        sans: ["Pretendard Variable", "Pretendard", "sans-serif"],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        /* 기본 스타일 초기화 및 변수 설정 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-        }
-
-        :root {
-            --bg-deep-navy: #0f172a; /* 묵직한 신뢰감의 딥 네이비 */
-            --bg-card: #1e293b;
-            --point-orange: #ff6b00; /* 열정적인 디지털 오렌지 */
-            --text-white: #f8fafc;
-            --text-gray: #94a3b8;
-            --max-width: 1100px;
-        }
-
-        /* 
-           푸터 하단 고정을 위한 뷰포트 설정 
-           화면 높이가 작아도 본문 영역이 늘어나면 스크롤이 자연스럽게 생깁니다.
-        */
-        html, body {
-            height: 100%;
-        }
-
         body {
-            background-color: var(--bg-deep-navy);
-            color: var(--text-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-            padding-top: 70px; /* 네비게이션 바 높이만큼 상단 여백 추가 */
-            display: flex;
-            flex-direction: column;
+            font-family: "Pretendard Variable", Pretendard, sans-serif;
         }
-
-        /* 공통 스타일 */
-        .container {
-            width: 100%;
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        section {
-            padding: 100px 0;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 48px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -8px;
-            width: 32px;
-            height: 4px;
-            background-color: var(--point-orange);
-        }
-
-        .highlight {
-            color: var(--point-orange);
-        }
-
-        /* 소개 섹션 스타일 (about.html 전용 기본 본문 구조) */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: start;
-        }
-
-        .profile-text h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .profile-text p {
-            color: var(--text-gray);
-            margin-bottom: 16px;
-            font-size: 1.05rem;
-            word-break: keep-all;
-        }
-
-        .hobby-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .hobby-item {
-            background-color: var(--bg-card);
-            padding: 24px;
-            border-radius: 8px;
-            border-left: 4px solid var(--text-gray);
-        }
-
-        .hobby-item.active {
-            border-left-color: var(--point-orange);
-        }
-
-        .hobby-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .hobby-desc {
-            color: var(--text-gray);
-            font-size: 0.95rem;
-            word-break: keep-all;
-        }
-
-        /* 푸터 - 언제나 최하단에 위치하도록 설정 */
-        footer {
-            background-color: #090d16;
-            padding: 48px 0;
-            color: var(--text-gray);
-            font-size: 0.95rem;
-            margin-top: auto; /* 위쪽 본문 공간을 밀어내어 맨 아래로 고정 */
-            width: 100%;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-links a {
-            color: var(--text-gray);
-            text-decoration: none;
-            margin-left: 24px;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--point-orange);
-        }
-
-        /* 반응형 레이아웃 조정 */
-        @media (max-width: 968px) {
-            .about-grid { grid-template-columns: 1fr; gap: 40px; }
-            section { padding: 70px 0; }
-        }
-
-        /* ==========================================================
-           [절대 수정 금지] 요청된 네비게이션 바 내부 스타일 주입
-           ========================================================== */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background-color: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-            z-index: 1000;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 1100px;
-            height: 100%;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .nav-logo {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #f8fafc;
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            list-style: none;
-            gap: 32px;
-        }
-
-        .nav-link {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #94a3b8;
-            text-decoration: none;
-            position: relative;
-            padding: 8px 0;
-            transition: color 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: #f8fafc;
-        }
-
-        .nav-link.active {
-            color: #ff6b00;
-            font-weight: 600;
-        }
-
-        .nav-link.active::after {
+        /* 기존 네비게이션 액티브 표시용 밑줄 스타일 유지 */
+        .nav-link-active::after {
             content: '';
             position: absolute;
             left: 0;
@@ -228,128 +39,69 @@
             height: 2px;
             background-color: #ff6b00;
         }
-
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 24px;
-            height: 18px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 1101;
-        }
-
-        .nav-toggle .bar {
-            width: 100%;
-            height: 2px;
-            background-color: #f8fafc;
-            transition: all 0.2s ease;
-        }
-
-        @media (max-width: 968px) {
-            .nav-toggle {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 260px;
-                height: 100vh;
-                background-color: #1e293b;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 100px 32px;
-                gap: 24px;
-                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-                transition: right 0.3s ease;
-            }
-
-            .nav-menu.open {
-                right: 0;
-            }
-
-            .nav-link {
-                font-size: 1.1rem;
-                display: block;
-                width: 100%;
-            }
-
-            .nav-toggle.open .bar:nth-child(1) {
-                transform: translateY(8px) rotate(45deg);
-            }
-            .nav-toggle.open .bar:nth-child(2) {
-                opacity: 0;
-            }
-            .nav-toggle.open .bar:nth-child(3) {
-                transform: translateY(-8px) rotate(-45deg);
-            }
-        }
+        /* 모바일 메뉴 X자 변형 애니메이션을 위한 커스텀 스타일 */
+        .nav-toggle.open .bar-1 { transform: translateY(8px) rotate(45deg); }
+        .nav-toggle.open .bar-2 { opacity: 0; }
+        .nav-toggle.open .bar-3 { transform: translateY(-8px) rotate(-45deg); }
     </style>
 </head>
-<body>
+<body class="bg-deep-navy text-text-white leading-relaxed overflow-x-hidden pt-[70px] flex flex-col h-full">
 
-    <!-- [절대 수정 금지 사양 반영] 상단 네비게이션 바 삽입 (KANGGYU 클릭 시 home.html 이동 연동) -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="home.html" class="nav-logo">KANGGYU<span class="highlight">.</span></a>
+    <nav class="fixed top-0 left-0 w-full h-[70px] bg-deep-navy/90 backdrop-blur-md border-b border-text-gray/10 z-[1000]">
+        <div class="flex justify-between items-center w-full max-w-[1100px] h-full mx-auto px-6">
+            <a href="home.html" class="text-xl font-extrabold tracking-wider text-text-white">KANGGYU<span class="text-point-orange">.</span></a>
             
-            <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+            <button class="nav-toggle flex flex-col justify-between w-6 h-[18px] bg-transparent border-none cursor-pointer p-0 z-[1101] md:hidden" id="navToggle" aria-label="메뉴 열기">
+                <span class="bar-1 w-full h-[2px] bg-text-white transition-all duration-200"></span>
+                <span class="bar-2 w-full h-[2px] bg-text-white transition-all duration-200"></span>
+                <span class="bar-3 w-full h-[2px] bg-text-white transition-all duration-200"></span>
             </button>
             
-            <ul class="nav-menu" id="navMenu">
-                <li class="nav-item"><a href="home.html" class="nav-link">기본 홈</a></li>
-                <li class="nav-item"><a href="about.html" class="nav-link active">스토리와 루틴</a></li>
-                <li class="nav-item"><a href="skills.html" class="nav-link">핵심 역량 헤드라인</a></li>
-                <li class="nav-item"><a href="target.html" class="nav-link">목표 기업</a></li>
+            <ul class="nav-menu fixed top-0 -right-full w-[260px] h-screen bg-card-navy flex flex-col items-start pt-[100px] px-8 gap-6 shadow-[-4px_0_20px_rgba(0,0,0,0.3)] transition-[right] duration-300 md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:items-center md:p-0 md:gap-8 md:shadow-none" id="navMenu">
+                <li class="w-full md:w-auto"><a href="home.html" class="relative text-[1.1rem] md:text-[0.95rem] font-medium text-text-gray hover:text-text-white block w-full py-2 md:inline transition-colors duration-200">기본 홈</a></li>
+                <li class="w-full md:w-auto"><a href="about.html" class="nav-link-active relative text-[1.1rem] md:text-[0.95rem] font-semibold text-point-orange block w-full py-2 md:inline">스토리와 루틴</a></li>
+                <li class="w-full md:w-auto"><a href="skills.html" class="relative text-[1.1rem] md:text-[0.95rem] font-medium text-text-gray hover:text-text-white block w-full py-2 md:inline transition-colors duration-200">핵심 역량 헤드라인</a></li>
+                <li class="w-full md:w-auto"><a href="target.html" class="relative text-[1.1rem] md:text-[0.95rem] font-medium text-text-gray hover:text-text-white block w-full py-2 md:inline transition-colors duration-200">목표 기업</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- 본문 내용: 소개 및 취미 구조 구성 -->
-    <section class="about">
-        <div class="container">
-            <h2 class="section-title">스토리와 루틴</h2>
-            <div class="about-grid">
-                <div class="profile-text">
-                    <h3>매일의 루틴과 전략이 만드는 단단함</h3>
-                    <p>안녕하세요, 01년생 개발자 송강규입니다. 기술을 학습하고 고도화해 나가는 과정을 스포츠에 비유하곤 합니다. 점진적 과부하를 견디며 근육을 키우듯, 매일의 러닝 커브를 성실하게 그려나가는 견고한 루틴을 믿습니다.</p>
-                    <p>단순한 텍스트 타이핑에 머무르지 않고, 화면 뒤에서 일어나는 데이터의 메커니즘과 시스템 구조 분석에 집요하게 파고드는 성향을 가졌습니다. 이러한 분석적 태도는 일상 속 취미와도 밀접하게 연결되어 있습니다.</p>
+    <section class="py-[70px] md:py-[100px]">
+        <div class="w-full max-w-[1100px] mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-12 relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-8 after:h-1 after:bg-point-orange">스토리와 루틴</h2>
+            
+            <div class="grid grid-columns-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
+                <div class="text-block">
+                    <h3 class="text-2xl font-bold mb-5">매일의 루틴과 전략이 만드는 단단함</h3>
+                    <p class="text-text-gray mb-4 text-[1.05rem] break-keep">안녕하세요, 01년생 개발자 송강규입니다. 기술을 학습하고 고도화해 나가는 과정을 스포츠에 비유하곤 합니다. 점진적 과부하를 견디며 근육을 키우듯, 매일의 러닝 커브를 성실하게 그려나가는 견고한 루틴을 믿습니다.</p>
+                    <p class="text-text-gray mb-4 text-[1.05rem] break-keep">단순한 텍스트 타이핑에 머무르지 않고, 화면 뒤에서 일어나는 데이터의 메커니즘과 시스템 구조 분석에 집요하게 파고드는 성향을 가졌습니다. 이러한 분석적 태도는 일상 속 취미와도 밀접하게 연결되어 있습니다.</p>
                 </div>
-                <div class="hobby-list">
-                    <div class="hobby-item active">
-                        <div class="hobby-title">🏋️‍♂️ 웨이트 & 러닝 : 지치지 않는 체력</div>
-                        <div class="hobby-desc">매일 트랙을 달리고 무게를 치며 성장의 항상성을 유지합니다. 이 정직한 성실함을 기술적 러닝 커브와 루틴 관리에도 고스란히 투영합니다.</div>
+                
+                <div class="flex flex-col gap-5">
+                    <div class="bg-card-navy p-6 rounded-lg border-l-4 border-point-orange">
+                        <div class="text-[1.15rem] font-bold mb-2">🏋️‍♂️ 웨이트 & 러닝 : 지치지 않는 체력</div>
+                        <div class="text-text-gray text-[0.95rem] break-keep">매일 트랙을 달리고 무게를 치며 성장의 항상성을 유지합니다. 이 정직한 성실함을 기술적 러닝 커브와 루틴 관리에도 고스란히 투영합니다.</div>
                     </div>
-                    <div class="hobby-item">
-                        <div class="hobby-title">🎮 게임 : 승리를 위한 전략적 분석</div>
-                        <div class="hobby-desc">단순한 플레이를 넘어, 승리를 위해 규칙을 분석하고 최선의 공식을 짜는 과정을 즐깁니다. 시스템을 쪼개고 공략하는 성향은 난해한 버그나 복잡한 알고리즘을 마주했을 때 집요한 문제 해결력의 바탕이 됩니다.</div>
+                    <div class="bg-card-navy p-6 rounded-lg border-l-4 border-text-gray">
+                        <div class="text-[1.15rem] font-bold mb-2">🎮 게임 : 승리를 위한 전략적 분석</div>
+                        <div class="text-text-gray text-[0.95rem] break-keep">단순한 플레이를 넘어, 승리를 위해 규칙을 분석하고 최선의 공식을 짜는 과정을 즐깁니다. 시스템을 쪼개고 공략하는 성향은 난해한 버그나 복잡한 알고리즘을 마주했을 때 집요한 문제 해결력의 바탕이 됩니다.</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 푸터 -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
+    <footer class="bg-footer-black py-12 text-text-gray text-[0.95rem] w-full mt-auto">
+        <div class="w-full max-w-[1100px] mx-auto px-6">
+            <div class="flex justify-between items-center">
                 <p>&copy; 2026 Song KangGyu. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="https://github.com" target="_blank">Github</a>
+                <div class="flex gap-6">
+                    <a href="https://github.com" target="_blank" class="text-text-gray hover:text-point-orange transition-colors duration-200">Github</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- [절대 수정 금지] 네비게이션 스크립트 주입 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const toggleBtn = document.getElementById('navToggle');
@@ -358,13 +110,20 @@
             if (toggleBtn && menu) {
                 toggleBtn.addEventListener('click', () => {
                     toggleBtn.classList.toggle('open');
-                    menu.classList.toggle('open');
+                    if(menu.classList.contains('-right-full')) {
+                        menu.classList.remove('-right-full');
+                        menu.classList.add('right-0');
+                    } else {
+                        menu.classList.remove('right-0');
+                        menu.classList.add('-right-full');
+                    }
                 });
 
-                menu.querySelectorAll('.nav-link').forEach(link => {
+                menu.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
                         toggleBtn.classList.remove('open');
-                        menu.classList.remove('open');
+                        menu.classList.remove('right-0');
+                        menu.classList.add('-right-full');
                     });
                 });
             }
