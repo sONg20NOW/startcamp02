@@ -66,6 +66,88 @@
         </div>
     </nav>
 
+    <!-- 배경 파티클 애니메이션 컴포넌트 -->
+<canvas id="bg-particles" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]"></canvas>
+
+<script>
+    (function() {
+        const canvas = document.getElementById('bg-particles');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 200; // 화면에 떠다닐 파티클 개수 (과하지 않게 최적화)
+
+        // 브라우저 창 크기에 맞게 캔버스 사이즈 조절
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        // 파티클 객체 생성자
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            // 파티클 위치 및 속성 초기화/재설정
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height; // 화면 아래쪽에서 생성되어 올라오도록
+                this.size = Math.random() * 2 + 1; // 1px ~ 3px 크기
+                this.speedX = Math.random() * 0.4 - 0.2; // 좌우 흔들림 속도
+                this.speedY = -(Math.random() * 0.5 + 0.2); // 위로 올라가는 속도 (-0.2 ~ -0.7)
+                // 주황색과 흰색 파티클을 은은한 투명도로 무작위 믹스
+                const isOrange = Math.random() > 0.6;
+                this.color = isOrange ? `rgba(255, 107, 0, ${Math.random() * 0.15 + 0.05})` : `rgba(248, 250, 252, ${Math.random() * 0.1 + 0.05})`;
+            }
+            // 위치 업데이트
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // 화면 위나 양옆으로 사라지면 다시 바닥이나 무작위 위치에서 재생성
+                if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+                    this.reset();
+                    this.y = canvas.height + 10;
+                }
+            }
+            // 화면에 그리기
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 파티클 배열 초기화
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                const p = new Particle();
+                // 초기 생성 시에는 화면 전체에 골고루 분산 배치
+                p.y = Math.random() * canvas.height;
+                particlesArray.push(p);
+            }
+        }
+        init();
+
+        // 매 프레임 애니메이션 루프 실행
+        function animate() {
+            // 이전 프레임 잔상 지우기
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    })();
+</script>
+
     <section class="py-[70px] md:py-[100px]">
         <div class="w-full max-w-[1100px] mx-auto px-6">
             <h2 class="text-3xl font-bold mb-12 relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-8 after:h-1 after:bg-point-orange">스토리와 루틴</h2>
