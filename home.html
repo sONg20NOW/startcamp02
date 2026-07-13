@@ -122,5 +122,77 @@
             }
         });
     </script>
+<div id="custom-cursor" class="fixed top-0 left-0 w-6 h-6 bg-[#ff6b00] rounded-full pointer-events-none z-[9999] mix-blend-screen opacity-0 transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_10px_rgba(255,107,0,0.6),0_0_40px_20px_rgba(255,107,0,0.4)]"></div>
+
+<script>
+    (function() {
+        const cursor = document.getElementById('custom-cursor');
+        
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        
+        const speed = 0.3;
+        
+        // 특정 영역(네비게이션 바, 푸터) 내부인지 체크하는 플래그
+        let isExcludedArea = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // 제외 영역에 있지 않고, 최초 움직임일 때 커서 표시
+            if (!isExcludedArea && cursor.classList.contains('opacity-0')) {
+                cursor.classList.remove('opacity-0');
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursor.classList.add('opacity-0');
+        });
+
+        function animateCursor() {
+            currentX += (mouseX - currentX) * speed;
+            currentY += (mouseY - currentY) * speed;
+            
+            cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        animateCursor();
+
+        // [네비게이션 바 & 푸터 영역 예외 처리]
+        const excludedElements = document.querySelectorAll('.navbar, nav, footer');
+        excludedElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                isExcludedArea = true;
+                cursor.classList.add('opacity-0'); // 영역 진입 시 주황 불빛 숨김
+            });
+            element.addEventListener('mouseleave', () => {
+                isExcludedArea = false;
+                cursor.classList.remove('opacity-0'); // 영역 이탈 시 다시 표시
+            });
+        });
+
+        // 클릭 가능 요소 호버 인터랙션 (제외 영역을 뺀 본문 콘텐츠 영역의 요소들만 타겟팅)
+        const clickables = document.querySelectorAll('main a, section a, button:not(#navToggle), [role="button"]');
+        clickables.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (!isExcludedArea) {
+                    cursor.style.width = '40px';
+                    cursor.style.height = '40px';
+                    cursor.style.backgroundColor = '#ff8c39';
+                }
+            });
+            item.addEventListener('mouseleave', () => {
+                cursor.style.width = '24px';
+                cursor.style.height = '24px';
+                cursor.style.backgroundColor = '#ff6b00';
+            });
+        });
+    })();
+</script>
 </body>
 </html>
