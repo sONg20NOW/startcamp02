@@ -1,0 +1,185 @@
+<!-- 상단 네비게이션 바 컴포넌트 -->
+<nav class="navbar">
+    <div class="nav-container">
+        <!-- 로고 또는 브랜드명 (필요 시 수정 가능) -->
+        <a href="#" class="nav-logo">KANGGYU<span class="highlight">.</span></a>
+        
+        <!-- 모바일 햄버거 버튼 -->
+        <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        
+        <!-- 네비게이션 메뉴 목록 -->
+        <ul class="nav-menu" id="navMenu">
+            <!-- 
+              여러 페이지에 복사해서 쓸 때, 
+              현재 보고 있는 페이지의 <a> 태그에만 class="active"를 옮겨 적어주면 됩니다.
+            -->
+            <li class="nav-item"><a href="#hero" class="nav-link active">기본 홈</a></li>
+            <li class="nav-item"><a href="#about" class="nav-link">스토리와 루틴</a></li>
+            <li class="nav-item"><a href="#skills" class="nav-link">핵심 역량 헤드라인</a></li>
+            <li class="nav-item"><a href="#cta" class="nav-link">목표 기업</a></li>
+        </ul>
+    </div>
+</nav>
+
+<style>
+    /* 네비게이션 전용 스타일 정의 */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background-color: rgba(15, 23, 42, 0.9); /* 딥 네이비 배경 + 투명도 */
+        backdrop-filter: blur(8px); /* 세련된 블러 효과 */
+        border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        z-index: 1000;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1100px;
+        height: 100%;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+
+    .nav-logo {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #f8fafc;
+        text-decoration: none;
+        letter-spacing: 1px;
+    }
+
+    .nav-menu {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        gap: 32px;
+    }
+
+    .nav-link {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #94a3b8; /* 기본 쿨 그레이 */
+        text-decoration: none;
+        position: relative;
+        padding: 8px 0;
+        transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+        color: #f8fafc;
+    }
+
+    /* 현재 보고 있는 페이지 강조 표시 (클래스 매핑) */
+    .nav-link.active {
+        color: #ff6b00; /* 디지털 오렌지 */
+        font-weight: 600;
+    }
+
+    .nav-link.active::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #ff6b00;
+    }
+
+    /* 모바일 햄버거 토글 버튼 스타일 */
+    .nav-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 24px;
+        height: 18px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1101;
+    }
+
+    .nav-toggle .bar {
+        width: 100%;
+        height: 2px;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+
+    /* 모바일 레이아웃 반응형 분기점 (968px) */
+    @media (max-width: 968px) {
+        .nav-toggle {
+            display: flex;
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 0;
+            right: -100%; /* 기본 상태에서 숨김 */
+            width: 260px;
+            height: 100vh;
+            background-color: #1e293b; /* 카드 섹션과 일치하는 묵직한 톤 */
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 100px 32px;
+            gap: 24px;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease;
+        }
+
+        .nav-menu.open {
+            right: 0; /* 메뉴 활성화 시 등장 */
+        }
+
+        .nav-link {
+            font-size: 1.1rem;
+            display: block;
+            width: 100%;
+        }
+
+        /* 햄버거 버튼 클릭 시 X 자 변형 애니메이션 */
+        .nav-toggle.open .bar:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+        .nav-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle.open .bar:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+    }
+</style>
+
+<script>
+    // 모바일 메뉴 제어를 위한 바닐라 JS 스크립트
+    // (1페이지만 작성하는 경우 원본 스크립트 아래에 그대로 얹어 쓰시면 작동합니다)
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('navToggle');
+        const menu = document.getElementById('navMenu');
+
+        if (toggleBtn && menu) {
+            toggleBtn.addEventListener('click', () => {
+                toggleBtn.classList.toggle('open');
+                menu.classList.toggle('open');
+            });
+
+            // 메뉴 클릭 시 모바일 메뉴 자동으로 닫기
+            menu.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    toggleBtn.classList.remove('open');
+                    menu.classList.remove('open');
+                });
+            });
+        }
+    });
+</script>
