@@ -43,9 +43,20 @@
         .nav-toggle.open .bar-1 { transform: translateY(8px) rotate(45deg); }
         .nav-toggle.open .bar-2 { opacity: 0; }
         .nav-toggle.open .bar-3 { transform: translateY(-8px) rotate(-45deg); }
+
+        /* 텍스트 파쇄 연출을 위한 필수 글자 스타일 */
+        .shatter-char {
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            will-change: transform, opacity;
+            user-select: none;
+        }
     </style>
 </head>
 <body class="bg-deep-navy text-text-white leading-relaxed overflow-x-hidden pt-[70px] flex flex-col h-full">
+
+    <canvas id="bg-particles" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]"></canvas>
 
     <nav class="fixed top-0 left-0 w-full h-[70px] bg-deep-navy/90 backdrop-blur-md border-b border-text-gray/10 z-[1000]">
         <div class="flex justify-between items-center w-full max-w-[1100px] h-full mx-auto px-6">
@@ -66,88 +77,6 @@
         </div>
     </nav>
 
-    <!-- 배경 파티클 애니메이션 컴포넌트 -->
-<canvas id="bg-particles" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]"></canvas>
-
-<script>
-    (function() {
-        const canvas = document.getElementById('bg-particles');
-        const ctx = canvas.getContext('2d');
-
-        let particlesArray = [];
-        const numberOfParticles = 200; // 화면에 떠다닐 파티클 개수 (과하지 않게 최적화)
-
-        // 브라우저 창 크기에 맞게 캔버스 사이즈 조절
-        function setCanvasSize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        setCanvasSize();
-        window.addEventListener('resize', setCanvasSize);
-
-        // 파티클 객체 생성자
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            // 파티클 위치 및 속성 초기화/재설정
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height + canvas.height; // 화면 아래쪽에서 생성되어 올라오도록
-                this.size = Math.random() * 2 + 1; // 1px ~ 3px 크기
-                this.speedX = Math.random() * 0.4 - 0.2; // 좌우 흔들림 속도
-                this.speedY = -(Math.random() * 0.5 + 0.2); // 위로 올라가는 속도 (-0.2 ~ -0.7)
-                // 주황색과 흰색 파티클을 은은한 투명도로 무작위 믹스
-                const isOrange = Math.random() > 0.6;
-                this.color = isOrange ? `rgba(255, 107, 0, ${Math.random() * 0.15 + 0.05})` : `rgba(248, 250, 252, ${Math.random() * 0.1 + 0.05})`;
-            }
-            // 위치 업데이트
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                // 화면 위나 양옆으로 사라지면 다시 바닥이나 무작위 위치에서 재생성
-                if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
-                    this.reset();
-                    this.y = canvas.height + 10;
-                }
-            }
-            // 화면에 그리기
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-        }
-
-        // 파티클 배열 초기화
-        function init() {
-            particlesArray = [];
-            for (let i = 0; i < numberOfParticles; i++) {
-                const p = new Particle();
-                // 초기 생성 시에는 화면 전체에 골고루 분산 배치
-                p.y = Math.random() * canvas.height;
-                particlesArray.push(p);
-            }
-        }
-        init();
-
-        // 매 프레임 애니메이션 루프 실행
-        function animate() {
-            // 이전 프레임 잔상 지우기
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-                particlesArray[i].draw();
-            }
-            requestAnimationFrame(animate);
-        }
-        animate();
-    })();
-</script>
-
     <section class="py-[70px] md:py-[100px] text-center">
         <div class="w-full max-w-[1100px] mx-auto px-6">
             <h2 class="text-3xl font-bold mb-12 relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-2 after:w-8 after:h-1 after:bg-point-orange">비전과 목표</h2>
@@ -158,9 +87,9 @@
                     <span class="bg-card-navy border border-point-orange/30 px-6 py-3 rounded-full font-semibold text-[1.05rem] text-text-white">삼성SDS (Samsung SDS)</span>
                 </div>
                 
-                <h3 class="text-3xl md:text-[2.25rem] font-extrabold mb-6 leading-normal md:leading-[1.4] break-keep">SSAFY에서 열정적으로 몰입하여,<br>목표 기업을 향해 <span class="text-point-orange">다 함께 완주합시다</span></h3>
-                <p class="text-text-gray text-[1.15rem] mb-10 break-keep">혼자 가면 빨리 가지만, 함께 가면 멀리 갈 수 있습니다. SSAFY라는 값진 트랙 위에서 동료 교육생들과 지식을 기꺼이 나누고, 힘든 순간도 성장을 위한 필연적인 과정으로 마주하며 치열하게 나아가겠습니다.</p>
-                <p class="text-text-gray text-[1.15rem] mb-10 break-keep">진정으로 함께 협업하고 싶은 단단한 개발자가 되어, 대규모 시스템과 비즈니스를 이끄는 최전선에서 기술적 가치를 증명해 내겠습니다.</p>
+                <h3 class="shatter-target text-3xl md:text-[2.25rem] font-extrabold mb-6 leading-normal md:leading-[1.4] break-keep">SSAFY에서 열정적으로 몰입하여,<br>목표 기업을 향해 <span class="text-point-orange">다 함께 완주합시다</span></h3>
+                <p class="shatter-target text-text-gray text-[1.15rem] mb-10 break-keep">혼자 가면 빨리 가지만, 함께 가면 멀리 갈 수 있습니다. SSAFY라는 값진 트랙 위에서 동료 교육생들과 지식을 기꺼이 나누고, 힘든 순간도 성장을 위한 필연적인 과정으로 마주하며 치열하게 나아가겠습니다.</p>
+                <p class="shatter-target text-text-gray text-[1.15rem] mb-10 break-keep">진정으로 함께 협업하고 싶은 단단한 개발자가 되어, 대규모 시스템과 비즈니스를 이끄는 최전선에서 기술적 가치를 증명해 내겠습니다.</p>
                 
                 <a href="mailto:your-email@example.com" class="inline-block bg-point-orange text-text-white px-8 py-4 font-semibold rounded transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#e56000]">협업 제안 및 연락하기</a>
             </div>
@@ -178,8 +107,11 @@
         </div>
     </footer>
 
+    <div id="custom-cursor" class="fixed top-0 left-0 w-6 h-6 bg-[#ff6b00] rounded-full pointer-events-none z-[9999] mix-blend-screen opacity-0 transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_10px_rgba(255,107,0,0.6),0_0_40px_20px_rgba(255,107,0,0.4)]"></div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. 모바일 네비게이션 토글
             const toggleBtn = document.getElementById('navToggle');
             const menu = document.getElementById('navMenu');
 
@@ -194,88 +126,190 @@
                         menu.classList.add('-right-full');
                     }
                 });
-
-                menu.querySelectorAll('a').forEach(link => {
-                    link.addEventListener('click', () => {
-                        toggleBtn.classList.remove('open');
-                        menu.classList.remove('right-0');
-                        menu.classList.add('-right-full');
-                    });
-                });
             }
-        });
-    </script>
-    <div id="custom-cursor" class="fixed top-0 left-0 w-6 h-6 bg-[#ff6b00] rounded-full pointer-events-none z-[9999] mix-blend-screen opacity-0 transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_10px_rgba(255,107,0,0.6),0_0_40px_20px_rgba(255,107,0,0.4)]"></div>
 
-<script>
-    (function() {
-        const cursor = document.getElementById('custom-cursor');
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let currentX = 0;
-        let currentY = 0;
-        
-        const speed = 0.3;
-        
-        // 특정 영역(네비게이션 바, 푸터) 내부인지 체크하는 플래그
-        let isExcludedArea = false;
+            // 2. 커스텀 마우스 커서 동작
+            const cursor = document.getElementById('custom-cursor');
+            let mouseX = 0, mouseY = 0, currentX = 0, currentY = 0;
+            const speed = 0.3;
+            let isExcludedArea = false;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            // 제외 영역에 있지 않고, 최초 움직임일 때 커서 표시
-            if (!isExcludedArea && cursor.classList.contains('opacity-0')) {
-                cursor.classList.remove('opacity-0');
-            }
-        });
-
-        document.addEventListener('mouseleave', () => {
-            cursor.classList.add('opacity-0');
-        });
-
-        function animateCursor() {
-            currentX += (mouseX - currentX) * speed;
-            currentY += (mouseY - currentY) * speed;
-            
-            cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
-            
-            requestAnimationFrame(animateCursor);
-        }
-        
-        animateCursor();
-
-        // [네비게이션 바 & 푸터 영역 예외 처리]
-        const excludedElements = document.querySelectorAll('.navbar, nav, footer');
-        excludedElements.forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                isExcludedArea = true;
-                cursor.classList.add('opacity-0'); // 영역 진입 시 주황 불빛 숨김
-            });
-            element.addEventListener('mouseleave', () => {
-                isExcludedArea = false;
-                cursor.classList.remove('opacity-0'); // 영역 이탈 시 다시 표시
-            });
-        });
-
-        // 클릭 가능 요소 호버 인터랙션 (제외 영역을 뺀 본문 콘텐츠 영역의 요소들만 타겟팅)
-        const clickables = document.querySelectorAll('main a, section a, button:not(#navToggle), [role="button"]');
-        clickables.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                if (!isExcludedArea) {
-                    cursor.style.width = '40px';
-                    cursor.style.height = '40px';
-                    cursor.style.backgroundColor = '#ff8c39';
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!isExcludedArea && cursor.classList.contains('opacity-0')) {
+                    cursor.classList.remove('opacity-0');
                 }
             });
-            item.addEventListener('mouseleave', () => {
-                cursor.style.width = '24px';
-                cursor.style.height = '24px';
-                cursor.style.backgroundColor = '#ff6b00';
+
+            document.addEventListener('mouseleave', () => { cursor.classList.add('opacity-0'); });
+
+            function animateCursor() {
+                currentX += (mouseX - currentX) * speed;
+                currentY += (mouseY - currentY) * speed;
+                cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            const excludedElements = document.querySelectorAll('.navbar, nav, footer');
+            excludedElements.forEach(element => {
+                element.addEventListener('mouseenter', () => { isExcludedArea = true; cursor.classList.add('opacity-0'); });
+                element.addEventListener('mouseleave', () => { isExcludedArea = false; cursor.classList.remove('opacity-0'); });
+            });
+
+            const clickables = document.querySelectorAll('main a, section a, button:not(#navToggle), [role="button"]');
+            clickables.forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    if (!isExcludedArea) { cursor.style.width = '40px'; cursor.style.height = '40px'; cursor.style.backgroundColor = '#ff8c39'; }
+                });
+                item.addEventListener('mouseleave', () => {
+                    cursor.style.width = '24px'; cursor.style.height = '24px'; cursor.style.backgroundColor = '#ff6b00';
+                });
             });
         });
-    })();
-</script>
+    </script>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('bg-particles');
+            const ctx = canvas.getContext('2d');
+            let particlesArray = [];
+            const numberOfParticles = 40; 
+
+            function setCanvasSize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            setCanvasSize();
+            window.addEventListener('resize', setCanvasSize);
+
+            class Particle {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height + canvas.height; 
+                    this.size = Math.random() * 2 + 1; 
+                    this.speedX = Math.random() * 0.4 - 0.2; 
+                    this.speedY = -(Math.random() * 0.5 + 0.2); 
+                    this.color = `rgba(255, 107, 0, ${Math.random() * 0.18 + 0.05})`;
+                }
+                update() {
+                    this.x += this.speedX; this.y += this.speedY;
+                    if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) { this.reset(); this.y = canvas.height + 10; }
+                }
+                draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.fill(); }
+            }
+
+            function init() {
+                for (let i = 0; i < numberOfParticles; i++) { const p = new Particle(); p.y = Math.random() * canvas.height; particlesArray.push(p); }
+            }
+            init();
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
+    </script><!-- 🔥 [UPDATE] 속도 다운그레이드 및 5초 후 자동 복구 기능이 추가된 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const targets = document.querySelectorAll('.shatter-target');
+
+            targets.forEach(target => {
+                const originalHTML = target.innerHTML;
+                
+                // 1. 기존 텍스트 엘리먼트 안의 글자들을 span 단위로 쪼개기 (HTML 태그 보존)
+                const container = document.createElement('span');
+                container.innerHTML = originalHTML;
+                
+                function tokenize(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const chars = node.textContent.split('');
+                        const fragment = document.createDocumentFragment();
+                        chars.forEach(char => {
+                            if (char.trim() === '') {
+                                fragment.appendChild(document.createTextNode(char));
+                            } else {
+                                const span = document.createElement('span');
+                                span.textContent = char;
+                                span.className = 'shatter-char';
+                                // 자연스러운 복구(회복) 애니메이션을 위한 트랜지션 추가
+                                span.style.transition = 'transform 0.8s ease-out, opacity 0.8s ease-out';
+                                fragment.appendChild(span);
+                            }
+                        });
+                        node.parentNode.replaceChild(fragment, node);
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        const children = Array.from(node.childNodes);
+                        children.forEach(tokenize);
+                    }
+                }
+                
+                Array.from(container.childNodes).forEach(tokenize);
+                target.innerHTML = '';
+                target.appendChild(container);
+
+                const allChars = Array.from(target.querySelectorAll('.shatter-char'));
+
+                // 글자 하나를 물리적으로 비산시키는 함수
+                function shatterEffect(element, delayMultiplier = 0) {
+                    if (element.style.opacity === '0') return;
+
+                    setTimeout(() => {
+                        // 1. 날아가는 속도 및 힘을 대폭 낮춤 (기존 100~250 -> 30~60 수준으로 경감)
+                        const angle = Math.random() * Math.PI * 2;
+                        const velocity = (Math.random() * 30 + 180) * (1 - delayMultiplier * 0.15); 
+                        const rotation = Math.random() * 180 - 90; // 회전 반경도 차분하게 조정
+                        
+                        const translateX = Math.cos(angle) * velocity;
+                        const translateY = Math.sin(angle) * velocity;
+
+                        // 날아가는 연출 적용
+                        element.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) rotate(${rotation}deg) scale(0.7)`;
+                        element.style.opacity = '0';
+
+                        // 2. [NEW] 5초(5000ms) 뒤 원래 자리로 부드럽게 복구
+                        setTimeout(() => {
+                            element.style.transform = 'none';
+                            element.style.opacity = '1';
+                        }, 5000);
+
+                    }, delayMultiplier * 50); 
+                }
+
+                // 2. 텍스트 컨테이너 내 클릭 이벤트 핸들러
+                target.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('shatter-char')) {
+                        const clickedChar = e.target;
+                        const clickedIndex = allChars.indexOf(clickedChar);
+
+                        if (clickedIndex === -1) return;
+
+                        // 클릭한 중심 글자 파쇄
+                        shatterEffect(clickedChar, 0);
+
+                        // 무작위로 주변 2글자 추가 파쇄 설정
+                        const affectLeftCount = Math.random() > 0.5 ? 1 : 2;
+                        const affectRightCount = 3 - affectLeftCount;
+
+                        // 왼쪽 방향 인접 글자들 날리기
+                        for (let i = 1; i <= affectLeftCount; i++) {
+                            const targetIndex = clickedIndex - i;
+                            if (targetIndex >= 0) {
+                                shatterEffect(allChars[targetIndex], i);
+                            }
+                        }
+
+                        // 오른쪽 방향 인접 글자들 날리기
+                        for (let i = 1; i <= affectRightCount; i++) {
+                            const targetIndex = clickedIndex + i;
+                            if (targetIndex < allChars.length) {
+                                shatterEffect(allChars[targetIndex], i);
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
