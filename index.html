@@ -1,392 +1,280 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>송강규 | 프론트엔드 개발자 포트폴리오</title>
     <!-- 프리텐다드 폰트 불러오기 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-navy': '#0f172a',
+                        'card-navy': '#1e293b',
+                        'point-orange': '#ff6b00',
+                        'text-white': '#f8fafc',
+                        'text-gray': '#94a3b8',
+                        'footer-black': '#090d16',
+                    },
+                    fontFamily: {
+                        sans: ["Pretendard Variable", "Pretendard", "sans-serif"],
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        /* 기본 스타일 초기화 및 변수 설정 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-        }
-
-        :root {
-            --bg-deep-navy: #0f172a; /* 묵직한 신뢰감의 딥 네이비 */
-            --bg-card: #1e293b;
-            --point-orange: #ff6b00; /* 열정적인 디지털 오렌지 */
-            --text-white: #f8fafc;
-            --text-gray: #94a3b8;
-            --max-width: 1100px;
-        }
-
         body {
-            background-color: var(--bg-deep-navy);
-            color: var(--text-white);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: "Pretendard Variable", Pretendard, sans-serif;
         }
-
-        /* 공통 스타일 */
-        .container {
-            width: 100%;
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        section {
-            padding: 100px 0;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 48px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
+        /* 기존 네비게이션 액티브 표시용 밑줄 스타일 유지 */
+        .nav-link-active::after {
             content: '';
             position: absolute;
             left: 0;
-            bottom: -8px;
-            width: 32px;
-            height: 4px;
-            background-color: var(--point-orange);
+            bottom: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #ff6b00;
         }
-
-        .highlight {
-            color: var(--point-orange);
-        }
-
-        /* 1. 히어로 섹션 */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-        }
-
-        .hero-tag {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--point-orange);
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.3;
-            margin-bottom: 24px;
-            word-break: keep-all;
-        }
-
-        .hero-desc {
-            font-size: 1.25rem;
-            color: var(--text-gray);
-            margin-bottom: 40px;
-            word-break: keep-all;
-        }
-
-        .btn-primary {
-            display: inline-block;
-            background-color: var(--point-orange);
-            color: var(--text-white);
-            padding: 16px 32px;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            background-color: #e56000;
-        }
-
-        /* 2. 소개 섹션 (나라는 사람 & 취미) */
-        .about {
-            background-color: rgba(30, 41, 59, 0.3);
-        }
-
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: start;
-        }
-
-        .profile-text h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .profile-text p {
-            color: var(--text-gray);
-            margin-bottom: 16px;
-            font-size: 1.05rem;
-        }
-
-        .hobby-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .hobby-item {
-            background-color: var(--bg-card);
-            padding: 24px;
-            border-radius: 8px;
-            border-left: 4px solid var(--text-gray);
-        }
-
-        .hobby-item.active {
-            border-left-color: var(--point-orange);
-        }
-
-        .hobby-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .hobby-desc {
-            color: var(--text-gray);
-            font-size: 0.95rem;
-        }
-
-        /* 3. 강점 카드 섹션 (Hard Skill & Core) */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .skill-card {
-            background-color: var(--bg-card);
-            padding: 40px 32px;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .skill-card:hover {
-            transform: translateY(-8px);
-        }
-
-        .skill-icon {
-            font-size: 2rem;
-            margin-bottom: 24px;
-            display: inline-block;
-        }
-
-        .skill-card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            word-break: keep-all;
-        }
-
-        .skill-card-desc {
-            color: var(--text-gray);
-            font-size: 1rem;
-            margin-bottom: 24px;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tag {
-            background-color: rgba(15, 23, 42, 0.6);
-            color: var(--text-white);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        /* 4. CTA 섹션 (싸피 동료 & 기업을 향한 다짐) */
-        .cta {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            text-align: center;
-            border-top: 1px solid rgba(255, 107, 0, 0.2);
-            border-bottom: 1px solid rgba(255, 107, 0, 0.2);
-        }
-
-        .cta-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta-title {
-            font-size: 2.25rem;
-            font-weight: 800;
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-
-        .cta-desc {
-            font-size: 1.15rem;
-            color: var(--text-gray);
-            margin-bottom: 40px;
-            word-break: keep-all;
-        }
-
-        /* 5. 푸터 */
-        footer {
-            background-color: #090d16;
-            padding: 48px 0;
-            color: var(--text-gray);
-            font-size: 0.95rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-links a {
-            color: var(--text-gray);
-            text-decoration: none;
-            margin-left: 24px;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--point-orange);
-        }
-
-        /* 반응형 레이아웃 조정 */
-        @media (max-width: 968px) {
-            .hero-title { font-size: 2.5rem; }
-            .about-grid { grid-template-columns: 1fr; gap: 40px; }
-            .skills-grid { grid-template-columns: 1fr; }
-            section { padding: 70px 0; }
-        }
+        /* 모바일 메뉴 X자 변형 애니메이션을 위한 커스텀 스타일 */
+        .nav-toggle.open .bar-1 { transform: translateY(8px) rotate(45deg); }
+        .nav-toggle.open .bar-2 { opacity: 0; }
+        .nav-toggle.open .bar-3 { transform: translateY(-8px) rotate(-45deg); }
     </style>
 </head>
-<body>
+<body class="bg-deep-navy text-text-white leading-relaxed overflow-x-hidden pt-[70px] flex flex-col h-full">
 
-    <!-- 1. 히어로 섹션 -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <p class="hero-tag">01년생 프론트엔드 개발자</p>
-                <h1 class="hero-title">지치지 않는 페이스로,<br>복잡한 문제를 풀며 <span class="highlight">함께 완주하는</span> 개발자</h1>
-                <p class="hero-desc">안녕하세요, 송강규입니다. 견고한 주춧돌 위에 세련된 인터페이스를 얹어내며, 동료에게는 신뢰할 수 있는 페이스메이커가 되는 것을 목표로 달립니다.</p>
-                <a href="#cta" class="btn-primary">함께 완주하기</a>
+    <!-- 상단 네비게이션 바 -->
+    <nav class="fixed top-0 left-0 w-full h-[70px] bg-deep-navy/90 backdrop-blur-md border-b border-text-gray/10 z-[1000]">
+        <div class="flex justify-between align-items center items-center w-full max-w-[1100px] h-full mx-auto px-6">
+            <a href="home.html" class="text-fe-white text-xl font-extrabold tracking-wider text-text-white">KANGGYU<span class="text-point-orange">.</span></a>
+            
+            <button class="nav-toggle flex flex-col justify-between w-6 h-[18px] bg-transparent border-none cursor-pointer p-0 z-[1101] md:hidden" id="navToggle" aria-label="메뉴 열기">
+                <span class="bar-1 w-full height h-[2px] bg-text-white transition-all duration-200"></span>
+                <span class="bar-2 w-full height h-[2px] bg-text-white transition-all duration-200"></span>
+                <span class="bar-3 w-full height h-[2px] bg-text-white transition-all duration-200"></span>
+            </button>
+            
+            <ul class="nav-menu fixed top-0 -right-full w-[260px] h-screen bg-card-navy flex flex-col items-start pt-[100px] px-8 gap-6 shadow-[-4px_0_20px_rgba(0,0,0,0.3)] transition-[right] duration-300 md:static md:w-auto md:h-auto md:bg-transparent md:flex-row md:items-center md:p-0 md:gap-8 md:shadow-none" id="navMenu">
+                <li class="w-full md:w-auto"><a href="home.html" class="nav-link-active relative text-[1.1rem] md:text-[0.95rem] font-semibold text-point-orange block w-full py-2 md:inline">기본 홈</a></li>
+                <li class="w-full md:w-auto"><a href="about.html" class="relative text-[1.1rem] md:text-[0.95rem] font-medium text-text-gray hover:text-text-white block w-full py-2 md:inline transition-colors duration-200">스토리와 루틴</a></li>
+                <li class="w-full md:w-auto"><a href="skills.html" class="relative text-[1.1rem] md:text-[0.95rem] font-medium text-text-gray hover:text-text-white block w-full py-2 md:inline transition-colors duration-200">핵심 역량 헤드라인</a></li>
+                <li class="w-full md:w-auto"><a href="target.html" class="relative text-[1.1rem] md:text-[0.95rem] font-medium text-text-gray hover:text-text-white block w-full py-2 md:inline transition-colors duration-200">목표 기업</a></li>
+            </ul>
+        </div>
+    </nav>
+
+<!-- 배경 파티클 애니메이션 컴포넌트 -->
+<canvas id="bg-particles" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[-1]"></canvas>
+
+<script>
+    (function() {
+        const canvas = document.getElementById('bg-particles');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 200; // 화면에 떠다닐 파티클 개수 (과하지 않게 최적화)
+
+        // 브라우저 창 크기에 맞게 캔버스 사이즈 조절
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        // 파티클 객체 생성자
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            // 파티클 위치 및 속성 초기화/재설정
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height; // 화면 아래쪽에서 생성되어 올라오도록
+                this.size = Math.random() * 2 + 1; // 1px ~ 3px 크기
+                this.speedX = Math.random() * 0.4 - 0.2; // 좌우 흔들림 속도
+                this.speedY = -(Math.random() * 0.5 + 0.2); // 위로 올라가는 속도 (-0.2 ~ -0.7)
+                // 주황색과 흰색 파티클을 은은한 투명도로 무작위 믹스
+                const isOrange = Math.random() > 0.6;
+                this.color = isOrange ? `rgba(255, 107, 0, ${Math.random() * 0.15 + 0.05})` : `rgba(248, 250, 252, ${Math.random() * 0.1 + 0.05})`;
+            }
+            // 위치 업데이트
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // 화면 위나 양옆으로 사라지면 다시 바닥이나 무작위 위치에서 재생성
+                if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+                    this.reset();
+                    this.y = canvas.height + 10;
+                }
+            }
+            // 화면에 그리기
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 파티클 배열 초기화
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                const p = new Particle();
+                // 초기 생성 시에는 화면 전체에 골고루 분산 배치
+                p.y = Math.random() * canvas.height;
+                particlesArray.push(p);
+            }
+        }
+        init();
+
+        // 매 프레임 애니메이션 루프 실행
+        function animate() {
+            // 이전 프레임 잔상 지우기
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    })();
+</script>
+
+    <!-- 본문 내용: 히어로 섹션 -->
+    <section class="h-[calc(100vh-70px)] flex items-center justify-start py-[70px] md:py-[100px]">
+        <div class="w-full max-w-[1100px] mx-auto px-6">
+            <div class="max-w-[800px]">
+                <p class="text-lg font-semibold text-point-orange mb-4 tracking-wider">01년생 프론트엔드 개발자 송강규</p>
+                <h1 class="text-4xl md:text-[3.5rem] font-extrabold linear line-height leading-tight md:leading-[1.3] mb-6 break-keep">지치지 않는 페이스로,<br>복잡한 문제를 풀며 <span class="text-point-orange">함께 완주하는</span> 개발자</h1>
+                <p class="text-ece text-xl text-text-gray mb-10 break-keep">안녕하세요, 2001년생 개발자 송강규입니다. 탄탄하게 다져진 기본기와 열정적인 러닝 페이스를 무기로, 화면 너머의 견고한 로직을 함께 빌드업하고 완주해 나갈 동료들을 기다립니다.</p>
+                <a href="about.html" class="inline-block bg-point-orange text-text-white px-8 py-4 font-semibold rounded transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#e56000]">내 스토리 보기</a>
             </div>
         </div>
     </section>
 
-    <!-- 2. 소개 섹션 -->
-    <section class="about" id="about">
-        <div class="container">
-            <h2 class="section-title">스토리와 루틴</h2>
-            <div class="about-grid">
-                <div class="profile-text">
-                    <h3>매일의 루틴과 전략이 만드는 단단함</h3>
-                    <p>단순히 코드를 타이핑하는 것을 넘어, 성장을 향한 점진적 과부하를 즐깁니다. 기술의 변화 속에서도 나만의 견고한 페이스를 잃지 않는 원동력은 일상의 단단한 루틴에서 나옵니다.</p>
-                    <p>SSAFY라는 트랙 안에서 동료 교육생들과 지식을 나누고 성장통을 원동력 삼아 최고의 시너지를 내고 싶습니다. 열정적인 몰입의 끝에서 진정으로 협업하고 싶은 개발자로 증명되겠습니다.</p>
-                </div>
-                <div class="hobby-list">
-                    <div class="hobby-item active">
-                        <div class="hobby-title">🏋️‍♂️ 웨이트 & 러닝 : 지치지 않는 체력</div>
-                        <div class="hobby-desc">매일 트랙을 달리고 무게를 치며 성장의 항상성을 유지합니다. 이 정직한 성실함을 기술적 러닝 커브에도 고스란히 적용합니다.</div>
-                    </div>
-                    <div class="hobby-item">
-                        <div class="hobby-title">🎮 게임 : 승리를 위한 전략적 분석</div>
-                        <div class="hobby-desc">복잡한 규칙 속에서 승리 공식을 찾아내는 짜릿함을 즐깁니다. 시스템을 쪼개고 분석하는 성향은 난해한 버그나 알고리즘을 만났을 때 집요한 해결력으로 이어집니다.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. 강점 카드 섹션 -->
-    <section class="skills" id="skills">
-        <div class="container">
-            <h2 class="section-title">핵심 역량 헤드라인</h2>
-            <div class="skills-grid">
-                <!-- 카드 1 -->
-                <div class="skill-card">
-                    <div class="skill-icon">🎯</div>
-                    <h3 class="skill-card-title">C++ 백준 골드 1이 증명하는 집요한 문제 해결력</h3>
-                    <p class="skill-card-desc">타협하지 않는 기본기로 대규모 아키텍처와 복잡한 비즈니스 로직을 마주했을 때 끝까지 정답을 추적해 냅니다.</p>
-                    <div class="skill-tags">
-                        <span class="tag">C++</span>
-                        <span class="tag">Algorithm</span>
-                        <span class="tag">Gold 1</span>
-                    </div>
-                </div>
-                <!-- 카드 2 -->
-                <div class="skill-card">
-                    <div class="skill-icon">⚡</div>
-                    <h3 class="skill-card-title">React와 Next.js 기반의 컴포넌트 구조 설계</h3>
-                    <p class="skill-card-desc">사용자 경험을 극대화하는 세련된 UI를 구현하며, Typescript를 활용해 유연하고 확장성 있는 코드를 작성합니다.</p>
-                    <div class="skill-tags">
-                        <span class="tag">Javascript</span>
-                        <span class="tag">Typescript</span>
-                        <span class="tag">React</span>
-                        <span class="tag">Next.js</span>
-                    </div>
-                </div>
-                <!-- 카드 3 -->
-                <div class="skill-card">
-                    <div class="skill-icon">🔄</div>
-                    <h3 class="skill-card-title">화면 너머를 이해하는 풀스택적 시야와 소통</h3>
-                    <p class="skill-card-desc">백엔드 메커니즘을 끊임없이 탐구하며 데이터의 유기적인 흐름을 이해합니다. 협업 시 소통 비용을 획기적으로 낮춥니다.</p>
-                    <div class="skill-tags">
-                        <span class="tag">Backend Curiosity</span>
-                        <span class="tag">Architecture</span>
-                        <span class="tag">Collaboration</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. CTA 섹션 -->
-    <section class="cta" id="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2 class="cta-title">SSAFY에서 열정적으로 몰입하여,<br><span class="highlight">현대오토에버 · 삼성SDS</span>를 향해</h2>
-                <p class="cta-desc">혼자 가면 빨리 가지만, 함께 가면 멀리 갑니다. 동료 교육생 여러분, 그리고 가치를 알아보는 미래의 기술 면접관님. 대형 프로젝트의 최전선까지 함께 지치지 않고 완주하겠습니다. 지금 크루로 합류하세요.</p>
-                <a href="mailto:your-email@example.com" class="btn-primary">협업 제안 및 연락하기</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 5. 푸터 -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
+    <!-- 푸터 -->
+    <footer class="bg-footer-black py-12 text-text-gray text-[0.95rem] w-full mt-auto">
+        <div class="w-full max-w-[1100px] mx-auto px-6">
+            <div class="flex justify-between items-center">
                 <p>&copy; 2026 Song KangGyu. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="https://github.com" target="_blank">Github</a>
-                    <a href="#about">About</a>
+                <div class="flex gap-6">
+                    <a href="https://github.com" target="_blank" class="text-text-gray hover:text-point-orange transition-colors duration-200">Github</a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- 네비게이션 스크립트 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('navToggle');
+            const menu = document.getElementById('navMenu');
+
+            if (toggleBtn && menu) {
+                toggleBtn.addEventListener('click', () => {
+                    toggleBtn.classList.toggle('open');
+                    // Tailwind 우회 적용: right 클래스 제어
+                    if(menu.classList.contains('-right-full')) {
+                        menu.classList.remove('-right-full');
+                        menu.classList.add('right-0');
+                    } else {
+                        menu.classList.remove('right-0');
+                        menu.classList.add('-right-full');
+                    }
+                });
+
+                menu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        toggleBtn.classList.remove('open');
+                        menu.classList.remove('right-0');
+                        menu.classList.add('-right-full');
+                    });
+                });
+            }
+        });
+    </script>
+<div id="custom-cursor" class="fixed top-0 left-0 w-6 h-6 bg-[#ff6b00] rounded-full pointer-events-none z-[9999] mix-blend-screen opacity-0 transition-opacity duration-300 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_20px_10px_rgba(255,107,0,0.6),0_0_40px_20px_rgba(255,107,0,0.4)]"></div>
+
+<script>
+    (function() {
+        const cursor = document.getElementById('custom-cursor');
+        
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        
+        const speed = 0.3;
+        
+        // 특정 영역(네비게이션 바, 푸터) 내부인지 체크하는 플래그
+        let isExcludedArea = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // 제외 영역에 있지 않고, 최초 움직임일 때 커서 표시
+            if (!isExcludedArea && cursor.classList.contains('opacity-0')) {
+                cursor.classList.remove('opacity-0');
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursor.classList.add('opacity-0');
+        });
+
+        function animateCursor() {
+            currentX += (mouseX - currentX) * speed;
+            currentY += (mouseY - currentY) * speed;
+            
+            cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+        
+        animateCursor();
+
+        // [네비게이션 바 & 푸터 영역 예외 처리]
+        const excludedElements = document.querySelectorAll('.navbar, nav, footer');
+        excludedElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                isExcludedArea = true;
+                cursor.classList.add('opacity-0'); // 영역 진입 시 주황 불빛 숨김
+            });
+            element.addEventListener('mouseleave', () => {
+                isExcludedArea = false;
+                cursor.classList.remove('opacity-0'); // 영역 이탈 시 다시 표시
+            });
+        });
+
+        // 클릭 가능 요소 호버 인터랙션 (제외 영역을 뺀 본문 콘텐츠 영역의 요소들만 타겟팅)
+        const clickables = document.querySelectorAll('main a, section a, button:not(#navToggle), [role="button"]');
+        clickables.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if (!isExcludedArea) {
+                    cursor.style.width = '40px';
+                    cursor.style.height = '40px';
+                    cursor.style.backgroundColor = '#ff8c39';
+                }
+            });
+            item.addEventListener('mouseleave', () => {
+                cursor.style.width = '24px';
+                cursor.style.height = '24px';
+                cursor.style.backgroundColor = '#ff6b00';
+            });
+        });
+    })();
+</script>
 </body>
 </html>
